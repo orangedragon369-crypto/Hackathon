@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
@@ -16,7 +18,7 @@ export default function CalendarPage() {
 
   // 🔹 load events
   useEffect(() => {
-    fetch("/api/events")
+    fetch("http://localhost:3001/api/events")
       .then(res => res.json())
       .then(data => {
         const formatted = data.map(e => ({
@@ -25,6 +27,10 @@ export default function CalendarPage() {
           end: new Date(e.end),
         }));
         setEvents(formatted);
+      })
+      .catch(err => {
+        console.log("API error:", err);
+        setEvents([]);
       });
   }, []);
 
@@ -41,7 +47,7 @@ export default function CalendarPage() {
     };
 
     // save to backend
-    await fetch("/api/events", {
+    await fetch("http://localhost:3001/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEvent),

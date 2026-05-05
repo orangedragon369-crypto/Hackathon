@@ -2,9 +2,14 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+
+
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+import CalendarPage from './pages/calender';
 import './App.css'
 
-function App() {
+function Home() {
   const [count, setCount] = useState(0)
 
   return (
@@ -28,10 +33,14 @@ function App() {
         >
           Count is {count}
         </button>
+
+        <Link to="/calendar">
+        <button>Open Calendar</button>
+        </Link>
       </section>
 
       <div className="ticks"></div>
-
+  
       <section id="next-steps">
         <div id="docs">
           <svg className="icon" role="presentation" aria-hidden="true">
@@ -114,8 +123,26 @@ function App() {
       </section>
 
       <div className="ticks"></div>
+
+
+      <div style={{ height: "600px", marginTop: "40px" }}>
+   {/* <CalendarPage /> */}
+
+   
+</div>
       <section id="spacer"></section>
     </>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
