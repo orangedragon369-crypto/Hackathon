@@ -4,7 +4,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-import { Link } from "react-router-dom";
 
 // =====================
 // LOCALIZER (top level)
@@ -70,9 +69,6 @@ export default function CalendarPage() {
   // =====================
   return (
     <div style={{ height: "90vh", padding: "20px" }}>
-      <Link to="/">
-        MConnect Home
-      </Link>
       <Calendar
         selectable
         localizer={localizer}
