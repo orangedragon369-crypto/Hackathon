@@ -7,6 +7,14 @@ import heroImg from './assets/hero.png'
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import CalendarPage from './pages/calender';
+
+import CommunicationPage from './pages/commication';
+
+import JobPosting from './pages/Jobposting';
+
+import Profile from './pages/Profile';
+
+
 import './App.css'
 
 function Home() {
@@ -37,7 +45,25 @@ function Home() {
         <Link to="/calendar">
         <button>Open Calendar</button>
         </Link>
+
+
+        <Link to="/commication">
+        <button>Open commication</button>
+        </Link>
+
+
+
+        <Link to="/jobposting">
+        <button>Open Job Posting</button>
+        </Link>
+
+        <Link to="/profile">
+        <button>Open Profile</button>
+        </Link>
       </section>
+
+
+
 
       <div className="ticks"></div>
   
@@ -141,6 +167,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path= "Commication" element={<CommunicationPage />} />
+        <Route path='jobposting' element={<JobPosting />} />
+        <Route path='profile' element={<Profile />} />
       </Routes>
     </BrowserRouter>
   )
