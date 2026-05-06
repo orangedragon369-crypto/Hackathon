@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import CalendarPage from './pages/calender';
 import './App.css'
+import Calender from './pages/calender'
 
 function Home() {
   const [count, setCount] = useState(0)
