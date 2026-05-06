@@ -8,9 +8,8 @@ app.use(express.json());
 let events = [];
 
 app.get("/api/events", (req, res) => {
-    res.setHeader("Content-Type", "application/json");
-    res.json(events);
-  });
+  res.json(events);
+});
 
 app.post("/api/events", (req, res) => {
   events.push(req.body);

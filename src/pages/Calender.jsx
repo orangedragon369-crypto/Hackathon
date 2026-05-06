@@ -19,7 +19,7 @@ const localizer = dateFnsLocalizer({
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
 
-  // ✅ ADD THIS (controls month navigation)
+
   const [date, setDate] = useState(new Date());
 
   // =====================
@@ -78,7 +78,8 @@ export default function CalendarPage() {
         onSelectSlot={handleSelectSlot}
 
 
-        views={["month", "week", "day"]}
+        views={["month"]}
+        defaultView="month"
 
 
         date={date}
