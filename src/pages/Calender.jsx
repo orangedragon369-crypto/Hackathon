@@ -4,6 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
+import "./calender.css";
 
 // =====================
 // LOCALIZER (top level)
@@ -19,6 +20,8 @@ const localizer = dateFnsLocalizer({
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
 
+
+  
 
   const [date, setDate] = useState(new Date());
 
@@ -48,19 +51,19 @@ export default function CalendarPage() {
   const handleSelectSlot = async (slotInfo) => {
     const title = prompt("Enter event title");
     if (!title) return;
-
+  
     const newEvent = {
       title,
-      start: slotInfo.start,
-      end: slotInfo.end,
+      start: new Date(slotInfo.start),
+      end: new Date(slotInfo.end),
     };
-
+  
     await fetch("http://localhost:3001/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEvent),
     });
-
+  
     setEvents(prev => [...prev, newEvent]);
   };
 
