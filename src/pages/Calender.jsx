@@ -4,6 +4,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
+import { Link } from "react-router-dom";
 
 // =====================
 // LOCALIZER (top level)
@@ -47,6 +48,9 @@ export default function CalendarPage() {
   // =====================
   const handleSelectSlot = async (slotInfo) => {
     const title = prompt("Enter event title");
+    const timeS = prompt("What time does this event start? Military Time");
+    const timeE = prompt("What time does this event end? Military Time");
+    const def = prompt("Event Description");
     if (!title) return;
 
     const newEvent = {
@@ -69,6 +73,9 @@ export default function CalendarPage() {
   // =====================
   return (
     <div style={{ height: "90vh", padding: "20px" }}>
+      <Link to="/">
+        MConnect Home
+      </Link>
       <Calendar
         selectable
         localizer={localizer}

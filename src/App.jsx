@@ -14,11 +14,11 @@ function Home() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-        <Link to="/calendar">
+    <blockquote>
+      <Link to="/calendar">
         <button>Open Calendar</button>
-        </Link>
-    </>
+      </Link>
+    </blockquote>
   )
 }
 
@@ -28,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/api/events" element=/>
       </Routes>
     </BrowserRouter>
   )
