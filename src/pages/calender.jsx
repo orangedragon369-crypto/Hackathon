@@ -1,87 +1,91 @@
-import React from 'react'
+import { useState, useEffect } from "react";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
-export function normalizeDate(time) {
-  const date = time instanceof Date ? new Date(time) : new Date(time)
+import { format, parse, startOfWeek, getDay } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 
-  if (Number.isNaN(date.getTime())) {
-    throw new Error('calender expected time to be a valid Date, timestamp, or date string')
-  }
+// =====================
+// LOCALIZER (top level)
+// =====================
+const localizer = dateFnsLocalizer({
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  locales: { "en-US": enUS },
+});
 
-  date.setHours(0, 0, 0, 0)
-  return date
-}
+export default function CalendarPage() {
+  const [events, setEvents] = useState([]);
 
-function addDays(date, amount) {
-  const nextDate = new Date(date)
-  nextDate.setDate(nextDate.getDate() + amount)
-  return nextDate
-}
+  // ✅ ADD THIS (controls month navigation)
+  const [date, setDate] = useState(new Date());
 
-function startOfWeek(date) {
-  return addDays(date, -date.getDay())
-}
+  // =====================
+  // LOAD EVENTS
+  // =====================
+  useEffect(() => {
+    fetch("http://localhost:3001/api/events")
+      .then(res => res.json())
+      .then(data => {
+        const formatted = data.map(e => ({
+          ...e,
+          start: new Date(e.start),
+          end: new Date(e.end),
+        }));
+        setEvents(formatted);
+      })
+      .catch(err => {
+        console.log("API error:", err);
+        setEvents([]);
+      });
+  }, []);
 
-function getWeekKey(date) {
-  return startOfWeek(date).toISOString()
-}
+  // =====================
+  // CREATE EVENT
+  // =====================
+  const handleSelectSlot = async (slotInfo) => {
+    const title = prompt("Enter event title");
+    if (!title) return;
 
-export function getCalenderWeeks(timeToDisplay, daysToShow) {
-  const totalDays = Math.max(0, Number(daysToShow) || 0)
-  const firstDay = normalizeDate(timeToDisplay)
-  const weeks = []
+    const newEvent = {
+      title,
+      start: slotInfo.start,
+      end: slotInfo.end,
+    };
 
-  for (let dayIndex = 0; dayIndex < totalDays; dayIndex += 1) {
-    const currentDay = addDays(firstDay, dayIndex)
-    const weekKey = getWeekKey(currentDay)
-    let week = weeks[weeks.length - 1]
+    await fetch("http://localhost:3001/api/events", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newEvent),
+    });
 
-    if (!week || week.key !== weekKey) {
-      week = {
-        key: weekKey,
-        start: startOfWeek(currentDay),
-        days: [],
-      }
-      weeks.push(week)
-    }
+    setEvents(prev => [...prev, newEvent]);
+  };
 
-    week.days.push(currentDay)
-  }
+  // =====================
+  // UI
+  // =====================
+  return (
+    <div style={{ height: "90vh", padding: "20px" }}>
+      <Calendar
+        selectable
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        onSelectSlot={handleSelectSlot}
 
-  return weeks
-}
 
-export function calender(sort, timeToDisplay, daysToShow, day) {
-  if (typeof day !== 'function') {
-    throw new Error('calender expected day to be a render function')
-  }
+        views={["month", "week", "day"]}
 
-  const weeks = getCalenderWeeks(timeToDisplay, daysToShow)
-  const renderedWeeks = []
 
-  for (let weekIndex = 0; weekIndex < weeks.length; weekIndex += 1) {
-    const week = weeks[weekIndex]
-    const renderedDays = []
+        date={date}
 
-    for (let dayIndex = 0; dayIndex < week.days.length; dayIndex += 1) {
-      const singleDay = week.days[dayIndex]
 
-      renderedDays.push(
-        <React.Fragment key={singleDay.toISOString()}>
-          {day(singleDay, sort)}
-        </React.Fragment>,
-      )
-    }
-
-    renderedWeeks.push(
-      <section className="calender-week" key={week.key}>
-        {renderedDays}
-      </section>,
-    )
-  }
-
-  return renderedWeeks
-}
-
-export default function Calender({ sort, time, daysToShow, day }) {
-  return <div id="calender">{calender(sort, time, daysToShow, day)}</div>
+        onNavigate={(newDate) => setDate(newDate)}
+      />
+    </div>
+  );
 }
