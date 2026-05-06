@@ -5,6 +5,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 
+// =====================
+// LOCALIZER (top level)
+// =====================
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -16,7 +19,12 @@ const localizer = dateFnsLocalizer({
 export default function CalendarPage() {
   const [events, setEvents] = useState([]);
 
-  // 🔹 load events
+  // ✅ ADD THIS (controls month navigation)
+  const [date, setDate] = useState(new Date());
+
+  // =====================
+  // LOAD EVENTS
+  // =====================
   useEffect(() => {
     fetch("http://localhost:3001/api/events")
       .then(res => res.json())
@@ -34,10 +42,11 @@ export default function CalendarPage() {
       });
   }, []);
 
-  // 🔹 create event (NOW INSIDE COMPONENT)
+  // =====================
+  // CREATE EVENT
+  // =====================
   const handleSelectSlot = async (slotInfo) => {
     const title = prompt("Enter event title");
-
     if (!title) return;
 
     const newEvent = {
@@ -46,17 +55,18 @@ export default function CalendarPage() {
       end: slotInfo.end,
     };
 
-    // save to backend
     await fetch("http://localhost:3001/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newEvent),
     });
 
-    // update UI instantly
-    setEvents((prev) => [...prev, newEvent]);
+    setEvents(prev => [...prev, newEvent]);
   };
 
+  // =====================
+  // UI
+  // =====================
   return (
     <div style={{ height: "90vh", padding: "20px" }}>
       <Calendar
@@ -66,6 +76,15 @@ export default function CalendarPage() {
         startAccessor="start"
         endAccessor="end"
         onSelectSlot={handleSelectSlot}
+
+
+        views={["month", "week", "day"]}
+
+
+        date={date}
+
+
+        onNavigate={(newDate) => setDate(newDate)}
       />
     </div>
   );
