@@ -42,7 +42,7 @@ function SignIn() {
       {user ? (
         <div className="topbar">
           <div>{user.displayName || user.email}</div>
-          <Link to="/">Home</Link>
+          {/* <Link to="/">Home</Link> */}
           <button onClick={handleSignOut} type="button">
             Sign out
           </button>
@@ -72,8 +72,8 @@ function App() {
     <BrowserRouter>
       <SignIn />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/calendar" element={<CalendarPage />} />
+        {/* <Route path="/" element={<Home />} /> */}
+        <Route path="/" element={<CalendarPage />} />
       </Routes>
     </BrowserRouter>
   )

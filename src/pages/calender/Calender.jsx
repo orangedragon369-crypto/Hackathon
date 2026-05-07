@@ -252,7 +252,7 @@ export default function CalendarPage() {
     <div style={{ display: "flex", height: "90vh", padding: "20px" }}>
       {hoveredEvent && <EventDetails event={hoveredEvent} /> }
       <div style={{ flex: 1, minWidth: 0 }}>
-        <Link to="/">MConnect Home</Link>
+        {/* <Link to="/">MConnect Home</Link> */}
         <Calendar
           selectable
           components={{ event: EventWithDelete }}
