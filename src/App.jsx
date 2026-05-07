@@ -1,34 +1,78 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-
-
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import CalendarPage from './pages/calender';
+import CalendarPage from './pages/calender/eventsStuff';
+import { auth, googleProvider } from './environment/environment';
 import './App.css'
-import Calender from './pages/calender'
 
-function Home() {
-  const [count, setCount] = useState(0)
+function SignIn() {
+  const [user, setUser] = useState(null);
+  const [authError, setAuthError] = useState("");
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setAuthError("");
+    });
+  }, []);
+
+  const handleSignIn = async () => {
+    try {
+      setAuthError("");
+      await signInWithPopup(auth, googleProvider);
+    } catch (err) {
+      console.log("Sign-in error:", err);
+      setAuthError(err.message);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      setAuthError("");
+      await signOut(auth);
+    } catch (err) {
+      console.log("Sign-out error:", err);
+      setAuthError(err.message);
+    }
+  };
 
   return (
-    <blockquote>
+    <div className="sign-in">
+      {user ? (
+        <>
+          <span>{user.displayName || user.email}</span>
+          <button onClick={handleSignOut} type="button">
+            Sign out
+          </button>
+        </>
+      ) : (
+        <button onClick={handleSignIn} type="button">
+          Sign in with Google
+        </button>
+      )}
+      {authError && <p className="sign-in-error">{authError}</p>}
+    </div>
+  );
+}
+
+function Home() {
+  return (
+    <main className="home">
       <Link to="/calendar">
         <button>Open Calendar</button>
       </Link>
-    </blockquote>
+    </main>
   )
 }
 
 function App() {
   return (
     <BrowserRouter>
+      <SignIn />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/api/events" element=/>
       </Routes>
     </BrowserRouter>
   )
