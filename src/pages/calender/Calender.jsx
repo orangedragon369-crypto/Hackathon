@@ -15,9 +15,11 @@ import {
 } from "firebase/firestore";
 import { Link } from "react-router-dom";
 import { auth, db } from "../../environment/environment";
-import EventDetails from "./eventDetails";
-import "./calender.css"
+import "./calender.css";
 
+// =====================
+// LOCALIZER (top level)
+// =====================
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -27,6 +29,41 @@ const localizer = dateFnsLocalizer({
 });
 
 const eventsCollection = collection(db, "events");
+
+ function parseEventTime(value) {
+  const match = (value || "").trim().match(/^([01]?\d|2[0-3])\.(\d{2})$/);
+
+  if (!match) return null;
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+
+  if (minutes > 59) return null;
+
+  return { hours, minutes };
+}
+
+function createEventDateValue(date, timeValue) {
+  const parsedTime = parseEventTime(timeValue);
+
+  if (!parsedTime) {
+    return null;
+  }
+
+  const eventDate = new Date(date);
+  eventDate.setHours(parsedTime.hours, parsedTime.minutes, 0, 0);
+
+  return eventDate.getTime();
+}
+
+function formatEventDateTime(value) {
+  if (!value) return "Not set";
+
+  return new Intl.DateTimeFormat(undefined, {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(value);
+}
 
 function toDate(value) {
   if (value instanceof Date) return value;
@@ -62,6 +99,9 @@ export default function CalendarPage() {
   const [date, setDate] = useState(new Date());
   const [user, setUser] = useState(null);
 
+  // =====================
+  // LOAD EVENTS
+  // =====================
   useEffect(() => {
     return onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -87,6 +127,41 @@ export default function CalendarPage() {
     return unsubscribe;
   }, [user]);
 
+  function EventDetails({ event }) {
+    return (
+      <div
+        id="eventDetails"
+        style={{
+          border: "1px solid var(--border)",
+          boxSizing: "border-box",
+          flex: "0 0 260px",
+          padding: "20px",
+          textAlign: "left",
+        }}
+      >
+        {event && (
+          <>
+            <h2>{event.title}</h2>
+            <p>
+              <strong>Campus:</strong> {event.campus || "Not set"}
+            </p>
+            <p>
+              <strong>Time:</strong> {formatEventDateTime(event.start)}
+            </p>
+            <p>
+              <strong>Details:</strong> {event.description || "Not set"}
+            </p>
+            <button onClick={()=>{setHoveredEvent(null)}}>X</button>
+  
+          </>
+        )}
+      </div>
+    );
+  }
+
+  // =====================
+  // CREATE EVENT
+  // =====================
   const handleSelectSlot = async (slotInfo) => {
     if (!user) {
       alert("Please sign in before adding events.");
@@ -96,12 +171,13 @@ export default function CalendarPage() {
     const title = prompt("Enter event title");
     if (!title || title === "") return;
     let time = prompt("What time does this event occur? Use HH.MM format, ex: 08.30 or 14.45");
+    if (!time || time === "") return;
     const campus = prompt("What campus is this event on?");
     if (!campus) return;
     const def = prompt("Event Description");
     
 
-    const dateValue = EventDetails.createEventDateValue(slotInfo.start, time);
+    const dateValue = createEventDateValue(slotInfo.start, time);
 
     if (dateValue === null) {
       alert("Please enter time in HH.MM format, like 08.30 or 14.45.");
@@ -169,9 +245,12 @@ export default function CalendarPage() {
     </div>
   );
 
+  // =====================
+  // UI
+  // =====================
   return (
     <div style={{ display: "flex", height: "90vh", padding: "20px" }}>
-      <EventDetails event={hoveredEvent} />
+      {hoveredEvent && <EventDetails event={hoveredEvent} /> }
       <div style={{ flex: 1, minWidth: 0 }}>
         <Link to="/">MConnect Home</Link>
         <Calendar
@@ -184,7 +263,8 @@ export default function CalendarPage() {
           onNavigate={(newDate) => setDate(newDate)}
           onSelectSlot={handleSelectSlot}
           startAccessor="start"
-          views={["month", "week", "day"]}
+          views={["month"]}
+          defaultView="month"
         />
       </div>
     </div>

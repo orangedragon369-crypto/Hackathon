@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import CalendarPage from './pages/calender/eventsStuff';
+import CalendarPage from './pages/calender/Calender';
 import { auth, googleProvider } from './environment/environment';
 import './App.css'
 
