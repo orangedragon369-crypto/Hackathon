@@ -171,6 +171,7 @@ export default function CalendarPage() {
     const title = prompt("Enter event title");
     if (!title || title === "") return;
     let time = prompt("What time does this event occur? Use HH.MM format, ex: 08.30 or 14.45");
+    if (!time || time === "") return;
     const campus = prompt("What campus is this event on?");
     if (!campus) return;
     const def = prompt("Event Description");
