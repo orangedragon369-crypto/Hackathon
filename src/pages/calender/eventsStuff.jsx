@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { auth, db } from "../../environment/environment";
 import EventDetails from "./eventDetails";
+import "./calender.css"
 
 const localizer = dateFnsLocalizer({
   format,
