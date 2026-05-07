@@ -72,8 +72,8 @@ function App() {
     <BrowserRouter>
       <SignIn />
       <Routes>
-        {/* <Route path="/" element={<Home />} /> */}
-        <Route path="/" element={<CalendarPage />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/calender" element={<CalendarPage />} />
       </Routes>
     </BrowserRouter>
   )
