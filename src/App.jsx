@@ -40,12 +40,13 @@ function SignIn() {
   return (
     <div className="sign-in">
       {user ? (
-        <>
-          <span>{user.displayName || user.email}</span>
+        <div className="topbar">
+          <div>{user.displayName || user.email}</div>
+          <Link to="/">Home</Link>
           <button onClick={handleSignOut} type="button">
             Sign out
           </button>
-        </>
+        </div>
       ) : (
         <button onClick={handleSignIn} type="button">
           Sign in with Google
