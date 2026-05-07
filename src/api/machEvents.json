@@ -1,0 +1,14 @@
+{
+    "weekEx": {
+        "notes": "52 total weeks for the year",
+        "day0": {
+            "event0":{
+                "name": "event one",
+                "timeS": 10.30,
+                "timeE": 14.30,
+                "description": "presentation"
+            }
+        },
+        "nextDay": "continue till 7 days"
+    }
+}
