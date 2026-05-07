@@ -1,0 +1,65 @@
+/* ===== ROOT CALENDAR ===== */
+.rbc-calendar {
+  background: #2a0f0f;
+  color: white;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* ===== HEADER ===== */
+.rbc-toolbar {
+  color: white;
+  margin-bottom: 10px;
+}
+
+.rbc-toolbar button {
+  background: #3f1d1d; /* maroon dark */
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 2px;
+}
+
+.rbc-toolbar button:hover {
+  background: #5a2525;
+}
+
+/* ===== TODAY ===== */
+.rbc-today {
+  background: rgba(128, 0, 32, 0.25) !important; /* maroon glow */
+  border: 1px solid #800020;
+}
+
+/* ===== GRID ===== */
+.rbc-day-bg {
+  background: #2a0f0f;
+}
+
+.rbc-off-range-bg {
+  background: #200b0b !important;
+}
+
+.rbc-month-view {
+  border: none;
+}
+
+/* ===== TEXT ===== */
+.rbc-date-cell {
+  color: #cbd5e1;
+}
+
+.rbc-current {
+  font-weight: bold;
+  color: #ffb3c1; /* soft pink highlight */
+}
+
+/* ===== EVENTS ===== */
+.rbc-event {
+  background: #800020 !important; /* maroon */
+  color: white !important;
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 2px 5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}

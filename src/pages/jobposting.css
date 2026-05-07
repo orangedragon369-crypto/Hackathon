@@ -1,0 +1,76 @@
+.job-container {
+    display: flex;
+    height: 90vh;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* ===== SIDEBAR ===== */
+  .job-sidebar {
+    width: 250px;
+    background: #0f172a;
+    color: white;
+    padding: 15px;
+  }
+  
+  .filter-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-group input,
+  .filter-group select {
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 5px;
+  }
+  
+  /* ===== BUTTON ===== */
+  .apply-btn {
+    width: 100%;
+    padding: 8px;
+    background: #800020;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  /* ===== MAIN AREA ===== */
+  .job-main {
+    flex: 1;
+    background: #111827;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+  }
+  
+  /* ===== HEADER ===== */
+  .job-header {
+    margin-bottom: 10px;
+  }
+  
+  /* ===== JOB LIST ===== */
+  .job-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* ===== JOB CARD ===== */
+  .job-card {
+    background: #1f2937;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 4px solid #800020;
+  }
+  
+  .job-card button {
+    margin-top: 8px;
+    background: #800020;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
