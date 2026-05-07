@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /events/{eventId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && isValidEvent(request.resource.data);
+      allow delete: if isSignedIn();
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidEvent(event) {
+      return event.keys().hasOnly([
+          "title",
+          "start",
+          "end",
+          "date",
+          "description",
+          "campus",
+          "time",
+          "timeS",
+          "timeE",
+          "def"
+        ])
+        && event.title is string
+        && event.title.size() > 0
+        && event.title.size() <= 120
+        && (
+          (event.start is timestamp && event.end is timestamp)
+          || event.date is number
+        )
+        && (!("description" in event) || event.description is string)
+        && (!("campus" in event) || event.campus is string)
+        && (!("time" in event) || event.time is string)
+        && (!("timeS" in event) || event.timeS is string)
+        && (!("timeE" in event) || event.timeE is string)
+        && (!("def" in event) || event.def is string);
+    }
+  }
+}
