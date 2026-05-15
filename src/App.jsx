@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
-import CalendarPage from './pages/calender/Calender';
+import CalendarPage from './pages/calendar/Calendar';
 import { auth, googleProvider } from './environment/environment';
 import './App.css'
+import CommunicationPage from "./pages/Commication";
+import JobPosting from "./pages/Jobposting";
+import Profile from "./pages/Profile"
 
 function SignIn() {
   const [user, setUser] = useState(null);
@@ -42,7 +45,7 @@ function SignIn() {
       {user ? (
         <div className="topbar">
           <div>{user.displayName || user.email}</div>
-          {/* <Link to="/">Home</Link> */}
+          <Link to="/">Home</Link>
           <button onClick={handleSignOut} type="button">
             Sign out
           </button>
@@ -59,12 +62,33 @@ function SignIn() {
 
 function Home() {
   return (
-    <main className="home">
-      <Link to="/calendar">
-        <button>Open Calendar</button>
-      </Link>
-    </main>
-  )
+    <div className="home-container">
+
+      <h1 className="title">My Control Panel</h1>
+      <p className="subtitle">Choose a module to continue</p>
+
+      <div className="card-grid">
+
+        <Link to="/calendar" className="card">
+           Calendar
+        </Link>
+
+        <Link to="/communication" className="card">
+           Communication
+        </Link>
+
+        <Link to="/jobposting" className="card">
+           Job Board
+        </Link>
+
+        <Link to="/profile" className="card">
+           Profile
+        </Link>
+
+      </div>
+
+    </div>
+  );
 }
 
 function App() {
@@ -73,7 +97,10 @@ function App() {
       <SignIn />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/calender" element={<CalendarPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/communication" element={<CommunicationPage />} />
+        <Route path="/jobposting" element={<JobPosting />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   )
